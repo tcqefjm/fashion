@@ -26,6 +26,11 @@ export default {
   fetchPersonal () {
     return $axios.get(`/user/personal`)
       .then(response => response.data)
+  },
+
+  getLoginInfo () {
+    return $axios.get(`/user/info`)
+      .then(response => response.data)
   }
 
 }

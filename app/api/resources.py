@@ -39,14 +39,19 @@ class Personal(Resource):
     def get(self):
         if current_user.is_authenticated:
             user_id = current_user.get_id()
-            #image = User(user_id).what()
+            return User(user_id).personal()
         else:
-            index_list = images.find({}, {'index': 1}).limit(50)
-            return [{'src': '/api/images/' + i['index']} for i in index_list]
-        personal = []
-        for i in range(50):
-            personal.append({"src": "/api/images/" + str(i)})
-        return personal
+            index_list = images.find({}, {'index': 1}).limit(20)
+            return [{'key': i['index']} for i in index_list]
+
+
+@api_rest.route('/user/info')
+class UserInfo(Resource):
+    def get(self):
+        if current_user.is_authenticated:
+            return {'isLogin': True, 'user': current_user.get_id()}
+        else:
+            return {'isLogin': False}
 
 
 @api_rest.route('/images/<string:image_id>')

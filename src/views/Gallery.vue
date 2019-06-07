@@ -1,14 +1,14 @@
 <template>
   <div id="gallery">
-    <vue-waterfall-easy ref="waterfall" :gap=24 :imgsArr="imgsArr" :imgWidth=280 :maxCols=4 @scrollReachBottom="getData" @click="clickFn" @imgError="imgErrorFn">
-    </vue-waterfall-easy>
+    <Waterfall ref="waterfall" :gap=24 :imgsArr="imgsArr" :imgWidth=280 :maxCols=4 :isLogin="isLogin" @scrollReachBottom="getData">
+    </Waterfall>
   </div>
 </template>
 
 <script>
 
 import $backend from '../backend'
-import vueWaterfallEasy from 'vue-waterfall-easy/src/vue-waterfall-easy/vue-waterfall-easy.vue'
+import Waterfall from '@/components/Waterfall.vue'
 
 export default {
   name: 'gallery',
@@ -16,47 +16,38 @@ export default {
     return {
       imgsArr: [],
       group: 0,
-      pullDownDistance: 0
+      isLogin: false
     }
   },
   components: {
-    vueWaterfallEasy
+    Waterfall
   },
   methods: {
     getData () {
       $backend.fetchPersonal()
         .then(res => {
           this.group++
-          if (this.group === 10) {
+          if (this.group === 5) {
             this.$refs.waterfall.waterfallOver()
             return
           }
+          res = res.map(x => ({
+            'src': "/api/images/" + x['key'],
+            'swap': "/api/faceswap/" + x['key']
+          }))
           this.imgsArr = this.imgsArr.concat(res)
         })
     },
-    clickFn (event, { index, value }) {
-      // event.preventDefault()
-      if (event.target.tagName.toLowerCase() === 'img') {
-        console.log('img clicked', index, value)
-      }
-    },
-    imgErrorFn (imgItem) {
-      console.log('图片加载错误', imgItem)
-    },
-    pullDownMove (pullDownDistance) {
-      // console.log('pullDownDistance', pullDownDistance)
-      this.pullDownDistance = pullDownDistance
-    },
-    pullDownEnd (pullDownDistance) {
-      console.log('pullDownEnd')
-      if (this.pullDownDistance > 50) {
-        alert('下拉刷新')
-      }
-      this.pullDownDistance = 0
+    getLoginInfo () {
+      $backend.getLoginInfo()
+        .then(res => {
+          this.isLogin = res['isLogin']
+        })
     }
   },
   created () {
     this.getData()
+    this.getLoginInfo()
   }
 }
 </script>
@@ -93,9 +84,6 @@ body,
     width: 100%;
   }
 }
-// .__err__ .img-wraper {
-//   background: url(/static/img/1.jpg) no-repeat center/100px 100px !important;
-// }
 #app {
   overflow: auto;
   position: relative;
