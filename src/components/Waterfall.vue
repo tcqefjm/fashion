@@ -124,7 +124,7 @@
           <a class="img-inner-box" v-if="v[srcKey]" :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}">
             <el-popover placement="top" width="360" :ref="`popover-` + i">
               <img :src="v['src']" style="width: 100%" @click="$refs[`popover-` + i][0].doClose()">
-              <el-button v-if="isLogin" type="primary" icon="el-icon-check" circle @click="$refs[`popover-` + i][0].$slots.default[0].elm.src = ($refs[`popover-` + i][0].$slots.default[0].elm.src.indexOf(v['src']) !== -1 ? v['swap'] : v['src'])">
+              <el-button v-if="isLogin" type="primary" icon="el-icon-check" circle style="position: absolute; bottom: 20px; left: 170px;" @click="$refs[`popover-` + i][0].$slots.default[0].elm.src = ($refs[`popover-` + i][0].$slots.default[0].elm.src.indexOf(v['src']) !== -1 ? v['swap'] : v['src'])">
               </el-button>
               <img slot="reference" :src="v[srcKey]">
             </el-popover>

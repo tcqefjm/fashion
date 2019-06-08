@@ -13,9 +13,9 @@ from flask_login import UserMixin, login_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from concurrent.futures import ThreadPoolExecutor
 
-# db = MongoClient('127.0.0.1', 27017)
-db = MongoClient('192.168.1.106', 27017)
-db.model.authenticate('ppy', 'ppy233')
+db = MongoClient('127.0.0.1', 27017)
+# db = MongoClient('192.168.1.106', 27017)
+# db.model.authenticate('ppy', 'ppy233')
 
 profile = db.user.profile
 images = db.model.image
@@ -26,8 +26,7 @@ def CreateUser(userid, password, img):
     pw_hash = generate_password_hash(password)
     img = resize_standard(img)
     age, gender, shape = face_info(img)
-    print('done done')
-    print(age, gender, shape)
+    # print(age, gender, shape)
     profile.insert_one({'user': userid, 'pass': pw_hash, 'image': img, 'age': str(age), 'gender': str(gender), 'shape': str(shape)})
 
 class User(UserMixin):
@@ -57,8 +56,11 @@ class User(UserMixin):
 
     def personal(self):
         face_info = profile.find_one({'user': self.userid}, {'user': 0, 'pass': 0, 'image': 0})
-        age, gender, shape = face_info['age'], face_info['gender'], face_info['shape']
-        index_list = images.find({'age': age, 'gender': gender, 'shape': shape}, {'index': 1}).limit(20)
+        try:
+            age, gender, shape = face_info['age'], face_info['gender'], face_info['shape']
+            index_list = images.find({'age': age, 'gender': gender, 'shape': shape}, {'index': 1}).limit(20)
+        except:
+            index_list = images.find({}, {'index': 1}).limit(20)
         return [{'key': i['index']} for i in index_list]
 
     def swap(self, index):

@@ -8,5 +8,5 @@ def resize_standard(img):
 	img = cv2.imdecode(img, cv2.IMREAD_COLOR)
 	width = STANDARD_WIDTH
 	height = img.shape[0] * STANDARD_WIDTH // img.shape[1]
-	output = cv2.resize(img, (width, height), interpolation = cv2.INTER_CUBIC)
+	output = cv2.resize(img, (width, height))
 	return cv2.imencode('.jpeg', output)[1].tostring()
