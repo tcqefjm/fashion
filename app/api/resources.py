@@ -4,7 +4,7 @@ from flask_restplus import Resource, abort
 from . import api_rest, User, images
 from werkzeug.datastructures import FileStorage
 from flask_restplus.reqparse import RequestParser
-from flask_login import current_user
+from flask_login import current_user, logout_user
 
 
 @api_rest.route('/user/register')
@@ -75,3 +75,9 @@ class FaceSwap(Resource):
             response.headers.set('Content-Type', 'image/jpeg')
             return response
         abort(401)
+
+@api_rest.route('/user/logout')
+class Logout(Resource):
+    def get(self):
+        logout_user()
+        return {'status': 'Success'}
