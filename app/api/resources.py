@@ -76,6 +76,7 @@ class FaceSwap(Resource):
             return response
         abort(401)
 
+
 @api_rest.route('/user/logout')
 class Logout(Resource):
     def get(self):

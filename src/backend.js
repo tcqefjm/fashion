@@ -3,7 +3,7 @@ import axios from 'axios'
 let $axios = axios.create({
   baseURL: '/api/',
   timeout: 5000,
-  headers: {'Content-Type': 'application/json'}
+  headers: { 'Content-Type': 'application/json' }
 })
 
 // Request Interceptor
@@ -30,6 +30,21 @@ export default {
 
   getLoginInfo () {
     return $axios.get(`/user/info`)
+      .then(response => response.data)
+  },
+
+  logoutUser () {
+    return $axios.get(`/user/logout`)
+      .then(response => response.data)
+  },
+
+  loginUser (params) {
+    return $axios.post(`/user/login`, params)
+      .then(response => response.data)
+  },
+
+  registerUser (params) {
+    return $axios.post(`/user/register`, params)
       .then(response => response.data)
   }
 

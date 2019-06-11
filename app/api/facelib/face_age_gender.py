@@ -27,7 +27,7 @@ def face_age_gender(aligned_images):
             pass
         age_temp, gender=sess.run([age, gender], feed_dict={images_pl: aligned_images, train_mode: False})
         if age_temp[0]<12:
-            age=0   #yound
+            age=0   #young
         elif age_temp[0]<50:
             age=1
         else:

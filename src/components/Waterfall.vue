@@ -1,11 +1,20 @@
 <style lang="scss" scoped>
+.small-img{
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.small-img:hover{
+  box-shadow: 0 0 10px rgb(24, 10, 104);
+  transform: scale(1.05);
+}
 .vue-waterfall-container {
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: hidden;
   .vue-waterfall-scroll {
     position: relative;
-    width: 100%;
+    width: 101%;
     height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -124,9 +133,9 @@
           <a class="img-inner-box" v-if="v[srcKey]" :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}">
             <el-popover placement="top" width="360" :ref="`popover-` + i">
               <img :src="v['src']" style="width: 100%" @click="$refs[`popover-` + i][0].doClose()">
-              <el-button v-if="isLogin" type="primary" icon="el-icon-check" circle style="position: absolute; bottom: 20px; left: 170px;" @click="$refs[`popover-` + i][0].$slots.default[0].elm.src = ($refs[`popover-` + i][0].$slots.default[0].elm.src.indexOf(v['src']) !== -1 ? v['swap'] : v['src'])">
+              <el-button v-if="isLogin" type="primary" icon="el-icon-magic-stick" circle style="position: absolute; bottom: 20px; left: 170px;" @click="$refs[`popover-` + i][0].$slots.default[0].elm.src = ($refs[`popover-` + i][0].$slots.default[0].elm.src.indexOf(v['src']) !== -1 ? v['swap'] : v['src'])">
               </el-button>
-              <img slot="reference" :src="v[srcKey]">
+              <img slot="reference" class="small-img" :src="v[srcKey]">
             </el-popover>
           </a>
         </div>
@@ -255,7 +264,6 @@ export default {
       this.$nextTick(() => {
         this.isPreloading = false
         this.imgBoxEls = this.$el.getElementsByClassName('img-box')
-        // console.log('图片总数', this.imgBoxEls.length)
         this.waterfall()
       })
     })
@@ -328,7 +336,6 @@ export default {
     // ==3== waterfall布局
     waterfall () {
       if (!this.imgBoxEls) return
-      // console.log('waterfall')
       var top, left, height, colWidth = this.isMobile ? this.imgBoxEls[0].offsetWidth : this.colWidth
       if (this.beginIndex === 0) this.colsHeightArr = []
       for (var i = this.beginIndex; i < this.imgsArr.length; i++) {
@@ -373,7 +380,6 @@ export default {
       var minHeight = Math.min.apply(null, this.colsHeightArr)
       if (scrollEl.scrollTop + scrollEl.offsetHeight > minHeight - this.reachBottomDistance) {
         this.isPreloading = true
-        // console.log('scrollReachBottom')
         this.$emit('scrollReachBottom') // 滚动触底
       }
     },

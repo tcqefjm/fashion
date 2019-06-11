@@ -26,7 +26,6 @@ def CreateUser(userid, password, img):
     pw_hash = generate_password_hash(password)
     img = resize_standard(img)
     age, gender, shape = face_info(img)
-    # print(age, gender, shape)
     profile.insert_one({'user': userid, 'pass': pw_hash, 'image': img, 'age': str(age), 'gender': str(gender), 'shape': str(shape)})
 
 class User(UserMixin):

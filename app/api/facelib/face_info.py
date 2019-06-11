@@ -35,12 +35,6 @@ def face_info(img):
     shape=face_shape(gender, img_array)
     return age, gender, shape
 
-# path = "./3.jpg"
-# with open(path, 'rb') as myimage:
-#     img = myimage.read()
-# face_info=face_info(img)
-# print(face_info)
-
 # age   0:0-12   1:13-50   2:>50
 # gender   0:female   1:male
 # shape   [0, 1, 2, 3, 4, 5]:['鹅蛋','方脸','心形','圆脸','长脸','钻石']

@@ -2,7 +2,6 @@ import numpy as np
 import os
 import json
 
-#FACE_NAME=['鹅蛋','方脸','心形','圆脸','长脸','钻石']
 FACE_NAME=[0, 1, 2, 3, 4, 5]
 
 FACE_TYPE=len(FACE_NAME)
@@ -57,4 +56,3 @@ def face_shape(gender, points_array):
             if(d[i]<d[m]):
                 m=i
         return FACE_NAME[m//SUB_FACE_TYPE_WOMAN]
-
