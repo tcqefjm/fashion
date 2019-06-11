@@ -52,12 +52,12 @@ export default {
       const that = this
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
-          let params = new URLSearchParams()
+          let params = new FormData()
           params.append('user', this.ruleForm2.username)
           params.append('pass', this.ruleForm2.password)
           $backend.loginUser(params)
             .then(function (res) {
-              if (res.data.status === 'Success') {
+              if (res.status === 'Success') {
                 that.$router.push({ path: '/view' })
               } else {
                 alert('Username or Password wrong!')

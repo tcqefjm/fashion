@@ -45,7 +45,6 @@
 <script>
 import $backend from '../backend'
 export default {
-  name: 'Register',
   data () {
     // <!--验证用户名是否合法-->
     let checkName = (rule, value, callback) => {
