@@ -24,9 +24,12 @@ executor = ThreadPoolExecutor()
 
 def CreateUser(userid, password, img):
     pw_hash = generate_password_hash(password)
+    profile.insert_one({'user': userid, 'pass': pw_hash})
     img = resize_standard(img)
     age, gender, shape = face_info(img)
-    profile.insert_one({'user': userid, 'pass': pw_hash, 'image': img, 'age': str(age), 'gender': str(gender), 'shape': str(shape)})
+    profile.update_one({'user': userid}, {'$set': {'image': img, 'age': str(age), 'gender': str(gender), 'shape': str(shape)}})
+
+cursor = None
 
 class User(UserMixin):
     def __init__(self, userid):
@@ -54,12 +57,19 @@ class User(UserMixin):
             return 'Failure'
 
     def personal(self):
+        global cursor
+        query = {'_id': {'$gt': cursor}} if cursor else {}
         face_info = profile.find_one({'user': self.userid}, {'user': 0, 'pass': 0, 'image': 0})
         try:
             age, gender, shape = face_info['age'], face_info['gender'], face_info['shape']
-            index_list = images.find({'age': age, 'gender': gender, 'shape': shape}, {'index': 1}).limit(20)
+            query.update({'age': age, 'gender': gender, 'shape': shape})
         except:
-            index_list = images.find({}, {'index': 1}).limit(20)
+            pass
+        index_list = images.find(query, {'index': 1}).limit(20)
+        if index_list.count() < 20:
+            cursor = None
+        else:
+            cursor = index_list[19]['_id']
         return [{'key': i['index']} for i in index_list]
 
     def swap(self, index):

@@ -24,11 +24,11 @@ export default {
     getData () {
       $backend.fetchPersonal()
         .then(res => {
-          this.group++
           if (this.group === 5) {
             this.$refs.waterfall.waterfallOver()
             return
           }
+          this.group++
           res = res.map(x => ({
             'src': '/api/images/' + x['key'],
             'swap': '/api/faceswap/' + x['key']

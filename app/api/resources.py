@@ -33,15 +33,24 @@ class Login(Resource):
         status = User(args['user']).login(args['pass'])
         return {'status': status}
 
+cursor = None
 
 @api_rest.route('/user/personal')
 class Personal(Resource):
     def get(self):
+        global cursor
         if current_user.is_authenticated:
             user_id = current_user.get_id()
             return User(user_id).personal()
         else:
-            index_list = images.find({}, {'index': 1}).limit(20)
+            if cursor:
+                index_list = images.find({'_id': {'$gt': cursor}}, {'index': 1}).limit(20)
+            else:
+                index_list = images.find({}, {'index': 1}).limit(20)
+            if index_list.count() < 20:
+                cursor = None
+            else:
+                cursor = index_list[19]['_id']
             return [{'key': i['index']} for i in index_list]
 
 

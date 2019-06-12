@@ -1,0 +1,11 @@
+cmake
+dlib
+flask
+flask-cors
+flask-login
+flask-restplus
+gunicorn
+imutils
+opencv-python
+pymongo
+tensorflow
