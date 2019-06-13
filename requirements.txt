@@ -1,4 +1,3 @@
-cmake
 dlib
 flask
 flask-cors
